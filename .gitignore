@@ -2,5 +2,7 @@ DataCollection/Damain.html
 DataCollection/reducedData.ipynb
 DataCollection/sampled_processed_data.csv
 
-
+display.csv
+processed_data.csv
+user_scores.csv
 

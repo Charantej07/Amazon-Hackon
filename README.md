@@ -56,7 +56,7 @@ The Amazon Review Analysis Project aims to provide insights into the authenticit
 
 ```bash
 git clone https://github.com/Charantej07/Amazon-Hackon
-cd your-repository
+cd Amazon-Hackon
 ```
 
 ## Usage 🚀

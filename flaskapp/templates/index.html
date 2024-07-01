@@ -3,83 +3,343 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Product List</title>
+    <title>MyStore - Home</title>
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../static/styles.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"
+    />
+    <style>
+      /* Additional CSS specific to mimic Amazon's layout */
+      .navbar {
+        background-color: #232f3e;
+        padding: 0.5rem 1rem;
+      }
+      .navbar-brand {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #ffffff;
+      }
+      .navbar-toggler {
+        border-color: #dddddd;
+      }
+      .navbar-dark .navbar-toggler-icon {
+        background-color: #ffffff;
+      }
+      .nav-item {
+        margin-right: 10px;
+      }
+      .navbar-nav {
+        font-size: 1.1rem;
+      }
+      .navbar-collapse {
+        justify-content: flex-end;
+      }
+      .search-bar {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        margin: 0 auto;
+      }
+      .search-input {
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        border: none;
+      }
+      .search-btn {
+        background-color: #febd69;
+        padding: 8px;
+        border-radius: 4px;
+        margin-left: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .search-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+      .header-dropdown {
+        position: relative;
+      }
+      .header-dropdown p {
+        cursor: pointer;
+        color: #ffffff;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #232f3e;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+      .dropdown-content a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+      .dropdown-content a:hover {
+        background-color: #febd69;
+      }
+      .header-dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .container {
+        padding-top: 20px;
+      }
+      .banner-container {
+        margin-bottom: 20px;
+      }
+      .banners img {
+        width: 100%;
+      }
+      .home-product-slider {
+        margin-top: 20px;
+      }
+      .sec-title {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+      /* Carousel with side arrows */
+      .slick-prev,
+      .slick-next {
+        font-size: 0;
+        line-height: 0;
+        position: absolute;
+        top: 50%;
+        width: 20px;
+        height: 20px;
+        transform: translate(0, -50%);
+        cursor: pointer;
+        border: none;
+        background: transparent;
+      }
+      .slick-prev {
+        left: -30px;
+      }
+      .slick-next {
+        right: -30px;
+      }
+      .slick-prev:before,
+      .slick-next:before {
+        font-size: 20px;
+        color: #febd69;
+      }
+      .slick-prev:before {
+        content: "\2039"; /* Code for 'previous' arrow */
+      }
+      .slick-next:before {
+        content: "\203a"; /* Code for 'next' arrow */
+      }
+      /* Footer */
+      .footer {
+        background-color: #232f3e;
+        color: #ffffff;
+        text-align: center;
+        padding: 20px 0;
+        width: 100%;
+        bottom: 0;
+      }
+      .footer p {
+        margin-bottom: 0;
+      }
+    </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">MyStore</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
-          </li>
-          {% if session.get('user_id') %}
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-          {% endif %}
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">Amazon Clone</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="search-bar mx-auto">
+            <input
+              class="search-input"
+              placeholder="Search products"
+              id="search-input"
+            />
+            <div class="search-btn">
+              <a href="#" id="search-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="24px"
+                  height="24px"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16a6.471 6.471 0 004.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C8.01 14 6 11.99 6 9.5S8.01 5 10.5 5 15 7.01 15 9.5 12.99 14 10.5 14z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/cart">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="24px"
+                  height="24px"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM7.79 16h8.93l1.44-7.34-12.38-.54-1.56-3.52H2v2h2l3.6 8h7.68l-1.25 6H7V18h8.72l-.72 4H7.79l-.7-3.5H5.29L7 16zm7.53-4.25l-2.44 1.22L12.42 10H6v-.25l5.41 1.29 3.91-1.97L13.42 11.75z"
+                  />
+                </svg>
+                {% if cart_items %}
+                <span class="badge badge-light">{{ cart_items }}</span>
+                {% endif %} Cart
+              </a>
+            </li>
+            {% if session.get('user_id') %}
+            <li class="nav-item header-dropdown">
+              <p>
+                {{ user_name }}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="24px"
+                  height="24px"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M7 10l5 5 5-5z" />
+                </svg>
+                Account
+              </p>
+              <div class="dropdown-content">
+                <a href="/profile">Profile</a>
+                <a href="/orderhistory">Order History</a>
+                <a href="/logout">Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/login">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  width="24px"
+                  height="24px"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 12c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+                Login
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
     </nav>
 
     <div class="container mt-5">
-      <h1 class="text-center mb-4">Product List</h1>
-      <div class="row">
-        {% for product in products %}
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            <img
-              src="../static/product.jpg"
-              class="card-img"
-              alt="Product Image"
-            />
-            <div class="card-body">
-              <h5 class="card-title">{{ product.asin }}</h5>
-              <p class="card-text">{{ product.title }}</p>
-              <a
-                href="/product/{{ product.asin }}"
-                class="btn btn-primary btn-block"
-                >View Details</a
-              >
+      <div class="banner-container">
+        <div class="banners">
+          <img
+            src="https://m.media-amazon.com/images/S/aplus-media/vc/342b936a-69f1-4e59-89ba-7ddb98c1acda.jpg"
+            alt=""
+          />
+        </div>
+        <div class="banners">
+          <img
+            src="https://cdn.shopify.com/s/files/1/1780/7915/files/Thermaltake_Level_20_RGB_Titanium_Gaming_Keyboard_From_The_Peripheral_Store_Banner_01.jpg?v=1598266526"
+            alt=""
+          />
+        </div>
+        <div class="banners">
+          <img
+            src="https://cdn.shopify.com/s/files/1/1780/7915/files/Game_Monitor_6a7a1deb-2d61-4307-99ac-f8c5a18d298f.jpg?8000210842524768871"
+            alt=""
+          />
+        </div>
+      </div>
+
+      <div class="home-product-slider">
+        <h2 class="sec-title">Featured Products</h2>
+        <div class="row">
+          {% for product in products %}
+          <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card">
+              <img
+                src="../static/product.jpg"
+                class="card-img-top"
+                alt="{{ product.name }}"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description }}</p>
+                <a href="/product/{{ product.asin }}" class="btn btn-primary"
+                  >View Product</a
+                >
+              </div>
             </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </div>
 
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-      <p>&copy; 2024 MyStore. All rights reserved.</p>
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2024 MyStore. All rights reserved.</p>
+      </div>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"
+    ></script>
+    <script>
+      // Initialize slick slider for banners
+      $(document).ready(function () {
+        $(".banner-container").slick({
+          dots: true,
+          infinite: true,
+          speed: 500,
+          fade: true,
+          cssEase: "linear",
+          prevArrow:
+            '<button type="button" class="slick-prev" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></button>',
+          nextArrow:
+            '<button type="button" class="slick-next" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></button>',
+        });
+      });
+    </script>
   </body>
 </html>
